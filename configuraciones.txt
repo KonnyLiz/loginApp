@@ -1,0 +1,4 @@
+Proyecto hrecho en Angular 7
+
+Corriendo en Angular 13 xd
+pero funciona

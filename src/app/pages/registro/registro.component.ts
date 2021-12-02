@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { UsuarioModel } from 'src/app/models/usuario.model';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-registro',
@@ -10,8 +11,6 @@ import { UsuarioModel } from 'src/app/models/usuario.model';
 export class RegistroComponent implements OnInit {
 
   usuario: UsuarioModel;
-
-  constructor() { }
 
   ngOnInit() {
     this.usuario = new UsuarioModel();

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UsuarioModel } from '../models/usuario.model';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +10,13 @@ export class AuthService {
 
   private url: string = 'https://identitytoolkit.googleapis.com/v1/accounts:';
   private API_KEY: string = 'AIzaSyDyGOv4Sg5cjqJh7U-JWlWQBW-CEDOtdRA';
+  userToken: string;
 
   constructor(
     private http: HttpClient
-  ) { }
+  ) {
+    this.getToken();
+  }
   // crear nuevo usuario
   // https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]
 
@@ -25,14 +29,19 @@ export class AuthService {
       returnSecureToken: true
     };
 
-    return this.http.post(`${this.url}signInWithPassword?key=${this.API_KEY}`, authData);
+    return this.http.post(`${this.url}signInWithPassword?key=${this.API_KEY}`, authData)
+      .pipe(map(res => {
+        this.saveToken(res['idToken']);
+        console.log('token guardado');
+        return;
+      }));
   }
 
   logout() {
 
   }
 
-  nuevoUsuario(usuario: UsuarioModel){
+  nuevoUsuario(usuario: UsuarioModel) {
 
     // con los puntos le decimos que queremos mandar toadas las
     // propiedades de UsuarioModel
@@ -41,7 +50,24 @@ export class AuthService {
       returnSecureToken: true
     };
 
-    return this.http.post(`${this.url}:signUp?key=${this.API_KEY}`, authData);
+    return this.http.post(`${this.url}:signUp?key=${this.API_KEY}`, authData)
+      .pipe(map(res => {
+        this.saveToken(res['idToken']);
+        return;
+      }));
+  }
+
+  private saveToken(idToken: string) {
+    this.userToken = idToken;
+    localStorage.setItem('token', idToken);
+  }
+
+  getToken() {
+    if (localStorage.getItem('token')) {
+      this.userToken = localStorage.getItem('token');
+    } else {
+      this.userToken = '';
+    }
   }
 
 }

@@ -19,7 +19,14 @@ export class AuthService {
   // iniciar sesion
   // https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=[API_KEY]
 
-  login(usuario: UsuarioModel) { }
+  login(usuario: UsuarioModel) {
+    const authData = {
+      ...usuario,
+      returnSecureToken: true
+    };
+
+    return this.http.post(`${this.url}signInWithPassword?key=${this.API_KEY}`, authData);
+  }
 
   logout() {
 

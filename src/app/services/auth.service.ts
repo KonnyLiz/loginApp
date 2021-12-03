@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UsuarioModel } from '../models/usuario.model';
 
@@ -11,7 +11,7 @@ export class AuthService {
   private API_KEY: string = 'AIzaSyDyGOv4Sg5cjqJh7U-JWlWQBW-CEDOtdRA';
 
   constructor(
-    private http: HttpClientModule
+    private http: HttpClient
   ) { }
   // crear nuevo usuario
   // https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=[API_KEY]
@@ -25,6 +25,16 @@ export class AuthService {
 
   }
 
-  nuevoUsuario(usuario: UsuarioModel){}
+  nuevoUsuario(usuario: UsuarioModel){
+
+    // con los puntos le decimos que queremos mandar toadas las
+    // propiedades de UsuarioModel
+    const authData = {
+      ...usuario,
+      returnSecureToken: true
+    };
+
+    return this.http.post(`${this.url}:signUp?key=${this.API_KEY}`, authData);
+  }
 
 }

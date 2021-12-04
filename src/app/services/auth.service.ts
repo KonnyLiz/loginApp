@@ -70,4 +70,8 @@ export class AuthService {
     }
   }
 
+  isAutenticated(): boolean {
+    return this.userToken.length > 2;
+  }
+
 }

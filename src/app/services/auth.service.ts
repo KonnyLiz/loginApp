@@ -33,7 +33,7 @@ export class AuthService {
       .pipe(map(res => {
         this.saveToken(res['idToken']);
         console.log('token guardado');
-        return;
+        return res;
       }));
   }
 
@@ -53,7 +53,7 @@ export class AuthService {
     return this.http.post(`${this.url}:signUp?key=${this.API_KEY}`, authData)
       .pipe(map(res => {
         this.saveToken(res['idToken']);
-        return;
+        return res;
       }));
   }
 

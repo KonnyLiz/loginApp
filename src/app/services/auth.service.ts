@@ -38,7 +38,8 @@ export class AuthService {
   }
 
   logout() {
-
+    // cerramos sesion cuando borramos el token 
+    localStorage.removeItem('token');
   }
 
   nuevoUsuario(usuario: UsuarioModel) {
@@ -60,6 +61,16 @@ export class AuthService {
   private saveToken(idToken: string) {
     this.userToken = idToken;
     localStorage.setItem('token', idToken);
+
+    // procedimiento para validar token
+    let hoy = new Date();
+
+    // deberia venir desde firebase
+    // representacion de la fecha actual 
+    hoy.setSeconds(3600);
+
+    // el ocalstorage solo guarda string
+    localStorage.setItem('expiredIn', hoy.getTime().toString());
   }
 
   getToken() {
@@ -71,6 +82,20 @@ export class AuthService {
   }
 
   isAutenticated(): boolean {
+    if (this.userToken.length < 2) {
+      return false;
+    }
+
+    const expira = Number(localStorage.getItem('expiredIn'));
+    const expiredIn = new Date();
+    expiredIn.setTime(expira);
+
+    if (expiredIn > new Date()) {
+      return true;
+    } else {
+      return false;
+    }
+
     return this.userToken.length > 2;
   }
 

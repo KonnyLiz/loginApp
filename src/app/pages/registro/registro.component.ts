@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 export class RegistroComponent implements OnInit {
 
   usuario: UsuarioModel;
+  recuerdaCorreo: boolean = false;
 
   constructor(
     private auth: AuthService,
@@ -39,6 +40,9 @@ export class RegistroComponent implements OnInit {
     this.auth.nuevoUsuario(this.usuario).subscribe(res => {
       console.log(res);
       Swal.close();
+      if (this.recuerdaCorreo) {
+        localStorage.setItem('email', this.usuario.email);
+      }
       this.router.navigateByUrl('/home');
 
     }, (err) => {
